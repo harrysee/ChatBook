@@ -2,4 +2,6 @@
     <string name="app_name">PickOne</string>
     <string name="facebook_application_id" translatable="false">YOUR_APP_ID</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fbYOUR_APP_ID</string>
+    <string name="main_keep">MY CHOOSE KEEP</string>
+    <string name="main_finish">MY CHOOSE FINISH</string>
 </resources>
