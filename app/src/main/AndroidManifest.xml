@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PickOne">
-        <activity android:name=".Show_votelist_Activity"></activity>
+        <activity android:name=".ExplanPageActivity"></activity>
+        <activity android:name=".Show_votelist_Activity" />
         <activity android:name=".AddPickItem" />
         <activity
             android:name=".ActivityResultLauncher"
