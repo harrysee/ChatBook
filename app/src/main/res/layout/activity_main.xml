@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Activity.MainActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -53,7 +53,7 @@
             android:id="@+id/main_addPick_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="25dp"
+            android:layout_marginRight="10dp"
             android:minWidth="160dp"
             android:minHeight="296dp"
             android:scaleType="fitCenter"
@@ -72,38 +72,41 @@
     </RelativeLayout>
 
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/relativeLayout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/relativeLayout"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minWidth="350dp"
                 android:layout_marginBottom="20dp"
+                android:minWidth="350dp"
                 android:orientation="vertical">
 
                 <View
                     android:layout_width="250dp"
                     android:layout_height="2dp"
+                    android:layout_marginBottom="7dp"
                     android:background="@color/black" />
 
                 <TextView
                     android:id="@+id/main_keep_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/scada_regular"
-                    android:text="@string/main_keep"
                     android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/scada_regular"
+                    android:text="@string/main_chat"
                     android:textColor="@color/black"
                     android:textSize="22sp" />
 
@@ -111,45 +114,31 @@
                     android:id="@+id/main_keep_recycle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:listitem="@layout/keep_item"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_keep" />
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minWidth="350dp"
-                android:orientation="vertical">
-
-                <View
-                    android:layout_width="250dp"
-                    android:layout_height="2dp"
-                    android:background="@color/black" />
-
-                <TextView
-                    android:id="@+id/main_finish_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/scada_regular"
-                    android:text="@string/main_finish"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="5dp"
-                    android:textSize="22sp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/main_finish_recycle"
-                    android:layout_width="match_parent"
-                    tools:listitem="@layout/finish_item"
-                    android:orientation="horizontal"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-            </LinearLayout>
         </LinearLayout>
 
     </ScrollView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#7886D5"
+        android:text="더 많은 책 둘러보기 >"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:gravity="right"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,13 @@
 <resources>
-    <string name="app_name">PickOne</string>
+    <string name="app_name">책팅방</string>
     <string name="facebook_application_id" translatable="false">YOUR_APP_ID</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fbYOUR_APP_ID</string>
-    <string name="main_keep">MY CHOOSE KEEP</string>
+    <string name="main_chat">MY BOOKS CHATS</string>
     <string name="main_finish">MY CHOOSE FINISH</string>
+    <string name="genre1">시사/토론</string>
+    <string name="genre2">에세이</string>
+    <string name="genre3">자기계발</string>
+    <string name="genre4">시집</string>
+    <string name="genre5">소설</string>
+    <string name="genre6">기타</string>
 </resources>

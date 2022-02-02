@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kr.hs.emirim.w2015.pickone">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,11 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PickOne">
-        <activity android:name=".ExplanPageActivity"></activity>
-        <activity android:name=".Show_votelist_Activity" />
-        <activity android:name=".AddPickItem" />
+        <activity android:name=".Activity.ChatRoomActivity"></activity>
+        <activity android:name=".Activity.ExplanPageActivity" />
+        <activity android:name=".Activity.RoomListActivity" />
+        <activity android:name=".Activity.AddChatBook" />
         <activity
-            android:name=".ActivityResultLauncher"
+            android:name=".Activity.ActivityResultLauncher"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".Activity.MainActivity"
             android:exported="true" />
     </application>
 

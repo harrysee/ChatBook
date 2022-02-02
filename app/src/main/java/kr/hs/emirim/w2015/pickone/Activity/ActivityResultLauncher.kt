@@ -1,44 +1,39 @@
-package kr.hs.emirim.w2015.pickone
+package kr.hs.emirim.w2015.pickone.Activity
 
 import android.content.ContentValues.TAG
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
-import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
-import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import androidx.appcompat.app.AlertDialog
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kr.hs.emirim.w2015.pickone.databinding.ActivityAddChatbookBinding
+import kr.hs.emirim.w2015.pickone.databinding.ActivityResultLauncherBinding
 
 class ActivityResultLauncher : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var login_btn : Button
-    private lateinit var input_email : TextView
-    private lateinit var input_password : TextView
     var user : FirebaseUser? = null
+    lateinit var binding: ActivityResultLauncherBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_result_launcher)
+        binding = ActivityResultLauncherBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         auth = Firebase.auth
-        input_email = findViewById(R.id.input_email)
-        input_password = findViewById(R.id.input_password)
-        login_btn = findViewById(R.id.login_btn)
 
-        login_btn.setOnClickListener{
-            val email = input_email.text.toString()
-            val password = input_password.text.toString()
+        binding.loginBtn.setOnClickListener{
+            val email = binding.inputEmail.text.toString()
+            val password = binding.inputPassword.text.toString()
 
-            auth.signInWithEmailAndPassword(email, password)    // 생성
+            auth.signInWithEmailAndPassword(email, password)    // 로그인
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
@@ -52,7 +47,17 @@ class ActivityResultLauncher : AppCompatActivity() {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.exception)
-                        create_user(email, password)
+                        val dialog = AlertDialog.Builder(this).run { 
+                            setTitle("회원가입 메시지")
+                            setMessage("해당 아이디와 비밀번호를 찾을수 없습니다\n해당 이메일,비밀번호로 회원가입 하시겠습니까?")
+                            setPositiveButton("yes") { dialogInterface: DialogInterface, i: Int ->
+                                create_user(email, password)
+                            }
+                            setNegativeButton("NO"){ dialog, i->
+                                Toast.makeText(baseContext, "로그인 실패",
+                                    Toast.LENGTH_SHORT).show()
+                            }
+                        }.show()
                         Toast.makeText(baseContext, "Authentication failed.",
                             Toast.LENGTH_SHORT).show()
 //                        updateUI(null)
@@ -61,6 +66,7 @@ class ActivityResultLauncher : AppCompatActivity() {
         }
 
     }
+
 
     fun create_user(email : String, password : String ){
         auth.createUserWithEmailAndPassword(email, password)
@@ -74,6 +80,12 @@ class ActivityResultLauncher : AppCompatActivity() {
 //                    updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
+                    AlertDialog.Builder(this).run {
+                        setTitle("비밀번호 오류")
+                        setMessage("비밀번호는 최소 6자 이상입니다.")
+                        setPositiveButton("yes",null)
+                        setNegativeButton("NO",null)
+                    }.show()
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     Toast.makeText(baseContext, "Authentication failed.",
                         Toast.LENGTH_SHORT).show()

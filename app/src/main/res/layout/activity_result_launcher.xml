@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_margin="40dp"
-    tools:context=".ActivityResultLauncher">
+    android:orientation="vertical"
+    tools:context=".Activity.ActivityResultLauncher">
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -19,47 +20,55 @@
 
         <ImageView
             android:layout_width="120dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
             android:layout_height="120dp"
-            android:src="@drawable/ic_logotest"
-            />
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_menu_book_24" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="#515D95"/>
         <EditText
             android:id="@+id/input_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/login_edit_shape"
+            android:hint="email"
             android:paddingLeft="20dp"
-            android:textSize="18sp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:background="@drawable/result_shape"
-            android:hint="email" />
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/input_password"
             android:layout_width="match_parent"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/login_edit_shape"
+            android:hint="Password"
             android:inputType="textPassword"
+            android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:background="@drawable/result_shape"
-            android:hint="Password" />
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/login_btn"
             android:layout_width="wrap_content"
-            android:minWidth="200dp"
-            android:layout_gravity="center"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:background="@drawable/login_shape"
-            android:textColor="#B53F3F"
+            android:minWidth="200dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="로그인" />
+            android:text="로그인"
+            android:textColor="#623FB5" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
