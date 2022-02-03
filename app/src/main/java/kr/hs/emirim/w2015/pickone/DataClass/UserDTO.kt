@@ -1,4 +1,6 @@
 package kr.hs.emirim.w2015.pickone.DataClass
 
-class UserDTO {
-}
+data class UserDTO (
+    val nickname : String?,
+    val uid : String?
+)

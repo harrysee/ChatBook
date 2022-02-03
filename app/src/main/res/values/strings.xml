@@ -10,4 +10,6 @@
     <string name="genre4">시집</string>
     <string name="genre5">소설</string>
     <string name="genre6">기타</string>
+    <string name="open">메뉴바 열림</string>
+    <string name="close">메뉴바 닫힘</string>
 </resources>

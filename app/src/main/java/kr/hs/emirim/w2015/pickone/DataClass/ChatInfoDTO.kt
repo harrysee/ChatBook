@@ -3,7 +3,7 @@ package kr.hs.emirim.w2015.pickone.DataClass
 class ChatInfoDTO(
     val roomname : String,
     val genres : String,
-    val creatUser : String,
+    val creator : String,
     val comment : String?,
     val bookkey : String?
 ){
@@ -11,7 +11,7 @@ class ChatInfoDTO(
         return mapOf(
             "roomname" to roomname,
             "genres" to genres,
-            "creatUser" to creatUser,
+            "creator" to creator,
             "comment" to comment,
             "bookkey" to bookkey
         )

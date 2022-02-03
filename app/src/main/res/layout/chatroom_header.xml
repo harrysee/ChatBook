@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:text="I am Header"
+    android:textStyle="bold"
+    android:textSize="15dp"
+    android:textColor="#fff"
+    android:background="#808FE3"
+    android:orientation="vertical"
+    android:layout_height="200dp">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="40dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/books"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/header_bookname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="책이름"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="20dp"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:textColor="#fff"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
+    <TextView
+        android:id="@+id/header_bookwriter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="안드레이이올"
+        android:textSize="18sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="#fff"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/header_bookname" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

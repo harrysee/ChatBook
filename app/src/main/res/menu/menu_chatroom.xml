@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_userlist"
+        android:title="책팅방 유저목록"
+        android:icon="@android:drawable/sym_call_outgoing"/>
+    <item
+        android:id="@+id/menu_code"
+        android:title="초대코드 복사"
+        android:icon="@android:drawable/sym_call_outgoing"/>
+    <item
+        android:id="@+id/menu_checkout"
+        android:title="나가기"
+        android:icon="@android:drawable/sym_call_outgoing"/>
+
+</menu>

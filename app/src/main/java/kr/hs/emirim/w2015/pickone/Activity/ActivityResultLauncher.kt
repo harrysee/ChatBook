@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -13,6 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import kr.hs.emirim.w2015.pickone.databinding.ActivityAddChatbookBinding
 import kr.hs.emirim.w2015.pickone.databinding.ActivityResultLauncherBinding
@@ -22,12 +24,16 @@ class ActivityResultLauncher : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     var user : FirebaseUser? = null
     lateinit var binding: ActivityResultLauncherBinding
+    lateinit var nickname : EditText
+    lateinit var firebaseDatabase: FirebaseDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResultLauncherBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = Firebase.auth
+        nickname = EditText(this)
+        firebaseDatabase = FirebaseDatabase.getInstance()
 
         binding.loginBtn.setOnClickListener{
             val email = binding.inputEmail.text.toString()
@@ -49,7 +55,8 @@ class ActivityResultLauncher : AppCompatActivity() {
                         Log.w(TAG, "signInWithEmail:failure", task.exception)
                         val dialog = AlertDialog.Builder(this).run { 
                             setTitle("회원가입 메시지")
-                            setMessage("해당 아이디와 비밀번호를 찾을수 없습니다\n해당 이메일,비밀번호로 회원가입 하시겠습니까?")
+                            setMessage("해당 아이디와 비밀번호를 찾을수 없습니다\n해당 이메일,비밀번호로 회원가입을 진행합니다.\n닉네임을 입력 > ")
+                            setView(nickname)
                             setPositiveButton("yes") { dialogInterface: DialogInterface, i: Int ->
                                 create_user(email, password)
                             }
@@ -72,9 +79,11 @@ class ActivityResultLauncher : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    user = auth.currentUser
+                    // 유저에 닉네임 저장
+                    firebaseDatabase.getReference().child("users").child(user.toString()).child("nickname").setValue(nickname.text)
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
-                    user = auth.currentUser
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
 //                    updateUI(user)
