@@ -33,10 +33,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MessageActivity : AppCompatActivity() {
+class ChatRoomActivity : AppCompatActivity() {
     private val fireDatabase = FirebaseDatabase.getInstance().reference
     private lateinit var chatRoomUid : String
-    private var destinationUid: String? = null
     private var uid: String? = null
     private var recyclerView: RecyclerView? = null
     private var chatinfo : ChatInfoDTO? = null
@@ -52,7 +51,6 @@ class MessageActivity : AppCompatActivity() {
         val time = System.currentTimeMillis()
         val dateFormat = SimpleDateFormat("MM월dd일 hh:mm")
         val curTime = dateFormat.format(Date(time)).toString()
-        destinationUid = intent.getStringExtra ("destinationUid")
         chatRoomUid = intent.getStringExtra("chatRoomUid").toString()
         uid = Firebase.auth.currentUser ?. uid.toString()
         recyclerView = findViewById (R.id.messageActivity_recyclerview)
@@ -65,7 +63,7 @@ class MessageActivity : AppCompatActivity() {
 
         // 보내기 클릭 시
         binding.messageActivityImageView.setOnClickListener {
-            Log.d("클릭 시 dest", "$destinationUid")
+            Log.d("클릭 시 dest", "보내기 클릭함")
             val comment = ChatDTO(
                 binding.messageActivityEditText.text.toString(),
                 uid,
@@ -74,7 +72,7 @@ class MessageActivity : AppCompatActivity() {
             fireDatabase.child("chatrooms").child(chatRoomUid.toString()).child("chats").push()
                 .setValue(comment.to_map())
                 binding.messageActivityEditText.text = null
-                Log.d ("chatUidNotNull dest", "$destinationUid")
+                Log.d ("chatUidNotNull dest", "$comment")
         }
         checkChatRoom()
     }
@@ -88,7 +86,7 @@ class MessageActivity : AppCompatActivity() {
                     chatinfo = snapshot.getValue<ChatInfoDTO>()
                     supportActionBar?.title = chatinfo?.roomname
                     binding.messageActivityImageView.isEnabled = true
-                    recyclerView?.layoutManager = LinearLayoutManager(this@MessageActivity)
+                    recyclerView?.layoutManager = LinearLayoutManager(this@ChatRoomActivity)
                     recyclerView?.adapter = RecyclerViewAdapter()
                 }
             })
@@ -145,7 +143,7 @@ class MessageActivity : AppCompatActivity() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
-            return MessageViewHolder(ItemMessageBinding.inflate(LayoutInflater.from(this@MessageActivity),parent,false))
+            return MessageViewHolder(ItemMessageBinding.inflate(LayoutInflater.from(this@ChatRoomActivity),parent,false))
         }
 
         override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {

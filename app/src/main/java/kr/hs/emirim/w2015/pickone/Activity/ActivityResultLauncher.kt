@@ -1,6 +1,7 @@
 package kr.hs.emirim.w2015.pickone.Activity
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -76,16 +77,21 @@ class ActivityResultLauncher : AppCompatActivity() {
 
 
     fun create_user(email : String, password : String ){
+        val pref = getSharedPreferences("user",Context.MODE_PRIVATE)
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     user = auth.currentUser
                     // 유저에 닉네임 저장
-                    firebaseDatabase.getReference().child("users").child(user.toString()).child("nickname").setValue(nickname.text)
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "createUserWithEmail:success")
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
+                    firebaseDatabase.getReference().child("users").child(user.toString()).child("nickname").setValue(nickname.text).addOnSuccessListener {
+                        // Sign in success, update UI with the signed-in user's information
+                        pref.edit().run {
+                            this.putString("nickname", nickname.text as String? )
+                        }
+                        Log.d(TAG, "createUserWithEmail:success")
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                    }
 //                    updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
