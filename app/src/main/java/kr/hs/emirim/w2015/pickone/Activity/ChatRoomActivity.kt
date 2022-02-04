@@ -32,6 +32,7 @@ import org.w3c.dom.Comment
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.properties.Delegates
 
 class ChatRoomActivity : AppCompatActivity() {
     private val fireDatabase = FirebaseDatabase.getInstance().reference
@@ -41,6 +42,8 @@ class ChatRoomActivity : AppCompatActivity() {
     private var chatinfo : ChatInfoDTO? = null
     private lateinit var binding : ActivityChatRoomBinding
     lateinit var toggle : ActionBarDrawerToggle
+    var line : Long = 0L
+    var isNew = true
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +55,7 @@ class ChatRoomActivity : AppCompatActivity() {
         val dateFormat = SimpleDateFormat("MM월dd일 hh:mm")
         val curTime = dateFormat.format(Date(time)).toString()
         chatRoomUid = intent.getStringExtra("chatRoomUid").toString()
-        uid = Firebase.auth.currentUser ?. uid.toString()
+        uid = Firebase.auth.currentUser?. uid.toString()
         recyclerView = findViewById (R.id.messageActivity_recyclerview)
         setSupportActionBar(binding.toolbar)
 
@@ -79,15 +82,28 @@ class ChatRoomActivity : AppCompatActivity() {
 
     // 채팅방 정보 초기화
     private fun checkChatRoom() {
-        fireDatabase.child("chatrooms").child(chatRoomUid).child("chatinfo")
+        fireDatabase.child("chatrooms").child(chatRoomUid)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {}
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    chatinfo = snapshot.getValue<ChatInfoDTO>()
+                    chatinfo = snapshot.child("chatinfo").getValue<ChatInfoDTO>()
                     supportActionBar?.title = chatinfo?.roomname
                     binding.messageActivityImageView.isEnabled = true
                     recyclerView?.layoutManager = LinearLayoutManager(this@ChatRoomActivity)
                     recyclerView?.adapter = RecyclerViewAdapter()
+
+                    for(user in snapshot.child("users").children){
+                        if(user.key.equals(uid)){
+                            // 기존 맴버일 경우 보여질채팅 처음부터
+                            line = user.value as Long
+                            isNew = false
+                        }
+                    }
+                    if(isNew) {
+                        // 기존 멤버가 아니면
+                        line = snapshot.child("chats").childrenCount as Long
+                        fireDatabase.child("chatrooms").child("user").child(uid.toString()).setValue(line)
+                    }
                 }
             })
     }
@@ -130,7 +146,13 @@ class ChatRoomActivity : AppCompatActivity() {
                     override fun onCancelled(error: DatabaseError) {}
                     override fun onDataChange(snapshot: DataSnapshot) {
                         comments.clear()
-                        for (data in snapshot.children) {
+                        // 채팅목록 저장하기
+                        var count = 0
+                        for (data in snapshot.children) {   // 그 유저가 볼수있는 채팅부터 목록 추가하기
+                            count+=1    // 목록개수 카운트 
+                            if(count < line){   // 볼수없으면 넘기기
+                                continue
+                            }
                             val item = data.getValue<ChatDTO>()
                             comments.add(item!!)
                             println(comments)
@@ -175,4 +197,5 @@ class ChatRoomActivity : AppCompatActivity() {
         
     }
 }
+
 
