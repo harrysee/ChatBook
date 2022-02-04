@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                     backgroundScope.launch {
                         // 코루틴 구동 시 실행되는 코드
                         val key = code.text.toString()
-                        firebase.child("chatroom").child(key)
+                        firebase.child("chatrooms").child(key)
                             .addListenerForSingleValueEvent(object :ValueEventListener{
                                 override fun onCancelled(error: DatabaseError) {
                                     Toast.makeText(this@MainActivity,"일치하는 책팅방이 존재하지않습니다",Toast.LENGTH_SHORT).show()

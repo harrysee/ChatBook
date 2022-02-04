@@ -37,6 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linear" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/roomlistRecycle"
         android:layout_width="match_parent"
         android:layout_marginTop="10dp"
         android:layout_height="0dp"

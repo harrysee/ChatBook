@@ -42,12 +42,10 @@ class AddChatBook : AppCompatActivity() {
                 .setPositiveButton("생성"){ dialog, i ->
                     // 채팅방 키
                     val chatkey = databaseReference.child("chatrooms").push().key
-                    // 책정보 데이터생성
-                    val bookkey = databaseReference.child("books").push().key
                     chatkey?.let { it1 ->
-                        bookkey?.let { it1 -> databaseReference.child("books").child(it1).setValue(getBook(roomkey = chatkey)) } //책정보 데이터넣기
+                        databaseReference.child("chatrooms").child(chatkey).child("book").setValue(getBook()) //책정보 데이터넣기
                         // 채팅방 정보 설정
-                        databaseReference.child("chatrooms").child(chatkey).child("chatInfo").setValue(getChatInfo(chatkey)) // 방정보 생성
+                        databaseReference.child("chatrooms").child(chatkey).child("chatInfo").setValue(getChatInfo()) // 방정보 생성
                         databaseReference.child("chatrooms").child(chatkey).child("users").child(user).setValue(true) // 방정보 생성
                         databaseReference.child("users").child(user.toString()).child("rooms").child(chatkey).setValue(true) // 방정보 생성
                     }
@@ -57,7 +55,7 @@ class AddChatBook : AppCompatActivity() {
         }
 
     }
-    fun getBook(roomkey : String) : Map<String, Any?>{
+    fun getBook() : Map<String, Any?>{
         var name = "null"
         val writer = binding.addbookWriter.text.toString()
         val link = binding.addbookLink.text.toString()
@@ -67,7 +65,6 @@ class AddChatBook : AppCompatActivity() {
             name = name.toString()
         }
         return BookDTO(
-            roomkey,
             user,
             name,
             writer,
@@ -75,7 +72,7 @@ class AddChatBook : AppCompatActivity() {
         ).toMap()
     }
 
-    fun getChatInfo(roomkey: String) : Map<String,Any?>{
+    fun getChatInfo() : Map<String,Any?>{
         var name = "null"
         val genres = when{
             binding.chatGenre1.isChecked -> R.string.genre1.toString()
@@ -96,8 +93,7 @@ class AddChatBook : AppCompatActivity() {
             roomname = name,
             genres = genres,
             creator = user,
-            comment = binding.addexEditText.text as String?,
-            bookkey = roomkey
+            comment = binding.addexEditText.text as String?
         ).toMap()
     }
 

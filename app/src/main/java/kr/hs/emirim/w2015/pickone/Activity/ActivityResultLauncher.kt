@@ -1,5 +1,6 @@
 package kr.hs.emirim.w2015.pickone.Activity
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.DialogInterface
@@ -75,7 +76,6 @@ class ActivityResultLauncher : AppCompatActivity() {
 
     }
 
-
     fun create_user(email : String, password : String ){
         val pref = getSharedPreferences("user",Context.MODE_PRIVATE)
         auth.createUserWithEmailAndPassword(email, password)
@@ -87,6 +87,7 @@ class ActivityResultLauncher : AppCompatActivity() {
                         // Sign in success, update UI with the signed-in user's information
                         pref.edit().run {
                             this.putString("nickname", nickname.text as String? )
+                            this.commit()
                         }
                         Log.d(TAG, "createUserWithEmail:success")
                         val intent = Intent(this, MainActivity::class.java)
