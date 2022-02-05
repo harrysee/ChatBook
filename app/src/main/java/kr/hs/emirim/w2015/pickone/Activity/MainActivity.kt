@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
@@ -20,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kr.hs.emirim.w2015.pickone.Adapter.MainRoomsAdapter
+import kr.hs.emirim.w2015.pickone.DataClass.ChatInfokeyDTO
 import kr.hs.emirim.w2015.pickone.R
 import kr.hs.emirim.w2015.pickone.databinding.ActivityMainBinding
 import kotlin.system.measureTimeMillis
@@ -28,6 +30,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var binding : ActivityMainBinding
     private lateinit var firebase : DatabaseReference
+    private lateinit var listdataScope : CoroutineScope
+    private lateinit var adapter : MainRoomsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +42,12 @@ class MainActivity : AppCompatActivity() {
         val user = auth.currentUser
         val pref = getSharedPreferences("user", Context.MODE_PRIVATE)
         val backgroundScope = CoroutineScope(Dispatchers.IO+ Job())
+        listdataScope = CoroutineScope(Dispatchers.IO+ Job())
         
         // 리사이클뷰 어댑터 설정
-        binding.userRoomRecycle.adapter = MainRoomsAdapter()
+        val datas = getDatas()
+        adapter = MainRoomsAdapter(datas, this)
+        binding.userRoomRecycle.adapter =adapter
 
         // 메뉴 이벤트 설정
         val emailTextView = findViewById<TextView>(R.id.main_email_text)
@@ -82,6 +89,38 @@ class MainActivity : AppCompatActivity() {
                 setNegativeButton("취소",null)
             }.show()
         }
+
+
+    }
+
+    private fun getDatas(): ArrayList<ChatInfokeyDTO> {
+        val data = ArrayList<ChatInfokeyDTO>()
+        listdataScope.launch {
+            firebase.child("chatrooms").orderByChild("users/${auth.currentUser.toString()}").startAt(0.0)
+                .addValueEventListener(object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (item in snapshot.children){
+                            val key = item.key
+                            val info = item.child("chatinfo")
+                            data.add(ChatInfokeyDTO(
+                                key,
+                                info.child("roomname").value as String?,
+                                info.child("genres").value as String,
+                                info.child("creator").value as String,
+                                info.child("comment").value as String?,
+                                item.child("users").childrenCount as Long
+                            ))
+                        }
+                        adapter.notifyDataSetChanged()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(this@MainActivity,"네트워크오류",Toast.LENGTH_SHORT).show()
+                    }
+                }
+            )
+        }
+        return data
 
     }
 }

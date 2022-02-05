@@ -1,6 +1,7 @@
 package kr.hs.emirim.w2015.pickone.Activity
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -93,7 +94,8 @@ class AddChatBook : AppCompatActivity() {
             roomname = name,
             genres = genres,
             creator = user,
-            comment = binding.addexEditText.text as String?
+            comment = binding.addexEditText.text as String?,
+            date = SystemClock.currentThreadTimeMillis()
         ).toMap()
     }
 

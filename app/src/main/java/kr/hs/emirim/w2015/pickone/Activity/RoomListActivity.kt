@@ -40,7 +40,7 @@ class RoomListActivity : AppCompatActivity() {
         dataScope.launch {
             val database = firebaseDatabase.reference
 
-            database.child("chatrooms").addValueEventListener(
+            database.child("chatrooms").orderByChild("chatinfo/date").addValueEventListener(
                 object : ValueEventListener{
                     override fun onDataChange(snapshot: DataSnapshot) {
                         for (item in snapshot.children){
@@ -51,7 +51,8 @@ class RoomListActivity : AppCompatActivity() {
                                 info.child("roomname").value as String?,
                                 info.child("genres").value as String,
                                 info.child("creator").value as String,
-                                info.child("comment").value as String?
+                                info.child("comment").value as String?,
+                                item.child("users").childrenCount as Long
                             ))
                         }
                         adapter.notifyDataSetChanged()
