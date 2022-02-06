@@ -21,12 +21,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import kr.hs.emirim.w2015.pickone.DataClass.ChatDTO
-import kr.hs.emirim.w2015.pickone.DataClass.ChatInfoDTO
-import kr.hs.emirim.w2015.pickone.DataClass.Chats
-import kr.hs.emirim.w2015.pickone.DataClass.UserDTO
+import kr.hs.emirim.w2015.pickone.DataClass.*
 import kr.hs.emirim.w2015.pickone.R
 import kr.hs.emirim.w2015.pickone.databinding.ActivityChatRoomBinding
+import kr.hs.emirim.w2015.pickone.databinding.ChatroomHeaderBinding
 import kr.hs.emirim.w2015.pickone.databinding.ItemMessageBinding
 import org.w3c.dom.Comment
 import java.text.SimpleDateFormat
@@ -41,7 +39,9 @@ class ChatRoomActivity : AppCompatActivity() {
     private var recyclerView: RecyclerView? = null
     private var chatinfo : ChatInfoDTO? = null
     private lateinit var binding : ActivityChatRoomBinding
+    private lateinit var bindingTool : ChatroomHeaderBinding
     lateinit var toggle : ActionBarDrawerToggle
+    var booksinfo : BookDTO? = null
     var line : Long = 0L
     var isNew = true
 
@@ -49,6 +49,7 @@ class ChatRoomActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatRoomBinding.inflate(layoutInflater)
+        bindingTool = ChatroomHeaderBinding.inflate(layoutInflater)
         setContentView (binding.root)
 
         val time = System.currentTimeMillis()
@@ -92,6 +93,9 @@ class ChatRoomActivity : AppCompatActivity() {
                     recyclerView?.layoutManager = LinearLayoutManager(this@ChatRoomActivity)
                     recyclerView?.adapter = RecyclerViewAdapter()
 
+                    booksinfo = snapshot.child("book").getValue<BookDTO>()
+                    bindingTool.headerBookname.text = booksinfo?.name as String?
+                    bindingTool.headerBookwriter.text = booksinfo?.writer
                     for(user in snapshot.child("users").children){
                         if(user.key.equals(uid)){
                             // 기존 맴버일 경우 보여질채팅 처음부터
@@ -112,6 +116,18 @@ class ChatRoomActivity : AppCompatActivity() {
         if(toggle.onOptionsItemSelected(item)){
             return true
         }
+        when(item.itemId){
+            R.id.menu_userlist -> {
+                // 유저들 목록 보여주기
+            }
+            R.id.menu_code ->{
+                // 초대코드 : 현재방키 복사시키기
+            }
+            R.id.menu_checkout->{
+                // 방장인지 확인하고 방 없애기
+            }
+        }
+
         return super.onOptionsItemSelected(item)
     }
     // 채팅방 리사이클어댑터
@@ -196,6 +212,8 @@ class ChatRoomActivity : AppCompatActivity() {
         }
         
     }
+
+
 }
 
 

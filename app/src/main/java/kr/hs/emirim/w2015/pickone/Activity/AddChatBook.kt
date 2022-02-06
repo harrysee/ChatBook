@@ -48,7 +48,7 @@ class AddChatBook : AppCompatActivity() {
                         // 채팅방 정보 설정
                         databaseReference.child("chatrooms").child(chatkey).child("chatInfo").setValue(getChatInfo()) // 방정보 생성
                         databaseReference.child("chatrooms").child(chatkey).child("users").child(user).setValue(0L) // 방정보 생성
-                        databaseReference.child("users").child(user.toString()).child("rooms").child(chatkey).setValue(true) // 방정보 생성
+//                        databaseReference.child("users").child(user.toString()).child("rooms").child(chatkey).setValue(true) // 방정보 생성
                     }
                     // 유저의 채팅방 목록에 추가
                 }
