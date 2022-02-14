@@ -1,6 +1,8 @@
 package kr.hs.emirim.w2015.pickone.Activity
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -9,7 +11,9 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -44,6 +48,7 @@ class ChatRoomActivity : AppCompatActivity() {
     var booksinfo : BookDTO? = null
     var line : Long = 0L
     var isNew = true
+    val userskey = ArrayList<String?>()
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +61,7 @@ class ChatRoomActivity : AppCompatActivity() {
         val dateFormat = SimpleDateFormat("MM월dd일 hh:mm")
         val curTime = dateFormat.format(Date(time)).toString()
         chatRoomUid = intent.getStringExtra("chatRoomUid").toString()
-        uid = Firebase.auth.currentUser?. uid.toString()
+        uid = Firebase.auth.currentUser?.uid.toString()
         recyclerView = findViewById (R.id.messageActivity_recyclerview)
         setSupportActionBar(binding.toolbar)
 
@@ -119,12 +124,35 @@ class ChatRoomActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.menu_userlist -> {
                 // 유저들 목록 보여주기
+                var msg = ""
+                for(i in 0..userskey.size){
+                    msg = msg+"\n"+userskey.get(i) as String?
+                }
+                AlertDialog.Builder(this)
+                    .setTitle("채팅방 유저목록")
+                    .setMessage(msg)
+                    .setPositiveButton("확인",null)
+                    .show()
             }
             R.id.menu_code ->{
                 // 초대코드 : 현재방키 복사시키기
+                //클립보드매니저(ClipboardManager)를 생성해주고 ClipData에 id값과 복사할 텍스트를 넣어준 후 클립보드매니저에 set해주면 된다.
+                val clip : ClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager;
+                val clipData = ClipData.newPlainText("Roomkey",chatRoomUid as String?)
+                clip.setPrimaryClip(clipData)
+                Toast.makeText(this,"책팅방 코드가 복사되었습니다",Toast.LENGTH_SHORT).show()
             }
             R.id.menu_checkout->{
-                // 방장인지 확인하고 방 없애기
+                // 나가기
+                AlertDialog.Builder(this)
+                    .setTitle("채팅방 유저목록")
+                    .setMessage("책팅방을 탈주 합니다.")
+                    .setPositiveButton("확인"){ dalog,i ->
+                        fireDatabase.child("chatrooms").child("users").child(uid.toString()).setValue(false)
+                        Toast.makeText(this,"삭제되었습니다.",Toast.LENGTH_SHORT).show()
+                    }
+                    .setNegativeButton("취소",null)
+                    .show()
             }
         }
 
@@ -148,6 +176,7 @@ class ChatRoomActivity : AppCompatActivity() {
                                     override fun onCancelled(error: DatabaseError) {}
                                     override fun onDataChange(snapshot: DataSnapshot) {
                                         usersinfo.plus(mapOf(item.key to snapshot.child("nickname").value as String? ))
+                                        userskey.add(snapshot.child("nickname").value as String?)
                                     }
                                 })
                         }
